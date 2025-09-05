@@ -1,103 +1,131 @@
-import Image from "next/image";
+'use client'
+
+import { useState } from "react";
+import { MagicMotion } from "react-magic-motion";
+
+const questions = [
+  {
+    question: "¿Qué cosa llevás siempre en la mochila?",
+    answers: [
+      { text: "Celular", points: 35 },
+      { text: "Botella de agua", points: 25 },
+      { text: "Llaves", points: 15 },
+      { text: "Cuadernos", points: 12 },
+      { text: "Auriculares", points: 8 },
+      { text: "Lapicera", points: 5 },
+    ],
+  },
+  {
+    question: "¿Qué cosa no puede faltar en un asado?",
+    answers: [
+      { text: "Carne", points: 40 },
+      { text: "Parrilla", points: 20 },
+      { text: "Chimichurri", points: 15 },
+      { text: "Ensalada", points: 10 },
+      { text: "Pan", points: 10 },
+      { text: "Vino", points: 5 },
+    ],
+  },
+];
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [revealed, setRevealed] = useState(
+    Array(questions[0].answers.length).fill(false)
+  );
+  const [teamTurn, setTeamTurn] = useState(1); // equipos del 1 al 6
+  const [teamScores, setTeamScores] = useState({
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
+    6: 0,
+  });
+  const [strikes, setStrikes] = useState(0);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const current = questions[currentIndex];
+
+  const toggleReveal = (index: number) => {
+    if (revealed[index]) return;
+    const newRevealed = [...revealed];
+    newRevealed[index] = true;
+    setRevealed(newRevealed);
+    setTeamScores({
+      ...teamScores,
+      [teamTurn]: teamScores[teamTurn as keyof typeof teamScores] + current.answers[index].points,
+    });
+  };
+
+  const wrongAnswer = () => {
+    if (strikes + 1 >= 1) {
+      setStrikes(0);
+      setTeamTurn(teamTurn === 6 ? 1 : teamTurn + 1);
+    } else {
+      setStrikes(strikes + 1);
+    }
+  };
+
+  const nextQuestion = () => {
+    const nextIndex = (currentIndex + 1) % questions.length;
+    setCurrentIndex(nextIndex);
+    setRevealed(Array(questions[nextIndex].answers.length).fill(false));
+    setStrikes(0);
+  };
+
+  return (
+    <MagicMotion>
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+        <h1 className="text-2xl font-bold mb-4 text-center">{current.question}</h1>
+
+        <div className="grid grid-cols-2 gap-4 w-full max-w-2xl">
+          {current.answers.map((answer, i) => (
+            <div
+              key={i}
+              className="bg-blue-600 text-white rounded-2xl shadow-md h-20 flex items-center justify-between px-6 cursor-pointer select-none"
+              onClick={() => toggleReveal(i)}
+            >
+              {revealed[i] ? (
+                <>
+                  <span className="font-semibold text-lg">{answer.text}</span>
+                  <span className="font-bold text-xl">{answer.points}</span>
+                </>
+              ) : (
+                <span className="w-full text-center font-bold text-xl">???</span>
+              )}
+            </div>
+          ))}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        <div className="mt-8 grid grid-cols-3 gap-6 text-center">
+          {Object.entries(teamScores).map(([team, score]) => (
+            <div key={team}>
+              <p className="text-lg font-medium">Equipo {team}</p>
+              <p className="text-3xl font-bold">{score}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6 text-center">
+          <p className="text-lg">Turno del equipo: <span className="font-bold">{teamTurn}</span></p>
+          <p className="text-red-600 text-2xl">{"❌".repeat(strikes)}</p>
+        </div>
+
+        <div className="flex gap-4 mt-6">
+          <button
+            onClick={wrongAnswer}
+            className="px-6 py-3 bg-red-600 text-white rounded-xl shadow hover:bg-red-700 transition"
+          >
+            Respuesta incorrecta
+          </button>
+          <button
+            onClick={nextQuestion}
+            className="px-6 py-3 bg-green-600 text-white rounded-xl shadow hover:bg-green-700 transition"
+          >
+            Siguiente pregunta
+          </button>
+        </div>
+      </div>
+    </MagicMotion>
   );
 }

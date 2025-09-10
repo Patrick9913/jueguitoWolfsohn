@@ -102,7 +102,7 @@ export default function Home() {
     5: 0,
     6: 0,
   });
-  const [strikes, setStrikes] = useState(0);
+  
   const [feedback, setFeedback] = useState<null | "win" | "lose">(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const audioCtxRef = useRef<AudioContext | null>(null);
@@ -236,7 +236,6 @@ export default function Home() {
 
   const wrongAnswer = () => {
     if (isTransitioning) return;
-    setStrikes(0);
     endPlayWith("lose");
   };
 
@@ -244,7 +243,6 @@ export default function Home() {
     const nextIndex = (currentIndex + 1) % questions.length;
     setCurrentIndex(nextIndex);
     setRevealed(Array(questions[nextIndex].answers.length).fill(false));
-    setStrikes(0);
   };
 
   return (

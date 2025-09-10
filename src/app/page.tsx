@@ -102,6 +102,7 @@ export default function Home() {
   const audioCtxRef = useRef<AudioContext | null>(null);
   const winAudioRef = useRef<HTMLAudioElement | null>(null);
   const loseAudioRef = useRef<HTMLAudioElement | null>(null);
+  console.log(strikes)
 
   const ensureAudioContext = async () => {
     if (typeof window === "undefined") return null;

@@ -3,6 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { MagicMotion } from "react-magic-motion";
 
+declare global {
+  interface Window {
+    webkitAudioContext?: typeof AudioContext;
+  }
+}
+
 const questions = [
   {
     question: "Algo que nunca falta en la mochila/cartera de un docente",
@@ -102,12 +108,12 @@ export default function Home() {
   const audioCtxRef = useRef<AudioContext | null>(null);
   const winAudioRef = useRef<HTMLAudioElement | null>(null);
   const loseAudioRef = useRef<HTMLAudioElement | null>(null);
-  console.log(strikes)
+  
 
   const ensureAudioContext = async () => {
     if (typeof window === "undefined") return null;
     if (!audioCtxRef.current) {
-      const Ctx = (window as any).AudioContext || (window as any).webkitAudioContext;
+      const Ctx = window.AudioContext || window.webkitAudioContext;
       if (!Ctx) return null;
       audioCtxRef.current = new Ctx();
     }

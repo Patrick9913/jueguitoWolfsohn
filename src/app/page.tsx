@@ -31,7 +31,7 @@ const questions = [
   {
     question: "Algo que los chicos siempre preguntan",
     answers: [
-      { text: "¿Puedo ir al baño?", points: 30 },
+      { text: "¿Puedo ir al baño?", points: 17 },
       { text: "¿Cuánto falta para ir a casa?", points: 25 },
       { text: "¿Ya terminamos?", points: 20 },
       { text: "¿Cuándo vamos al recreo/patio?", points: 15 },

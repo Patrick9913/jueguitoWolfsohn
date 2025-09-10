@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+@keyframes blink-red {
+  0%, 100% { background-color: #fee2e2; }
+  50% { background-color: #ef4444; }
+}
+
+@keyframes blink-green {
+  0%, 100% { background-color: #dcfce7; }
+  50% { background-color: #22c55e; }
+}
+
+.bg-blink-red {
+  animation: blink-red 0.9s ease-in-out 1;
+}
+
+.bg-blink-green {
+  animation: blink-green 0.9s ease-in-out 1;
+}

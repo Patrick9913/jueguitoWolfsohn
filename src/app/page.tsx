@@ -13,57 +13,65 @@ const questions = [
   {
     question: "Algo que nunca falta en la mochila/cartera de un docente",
     answers: [
-      { text: "Lápices / biromes", points: 19 },
-      { text: "Corrector", points: 0 },
+      { text: "Lápices / biromes", points: 18 },
       { text: "Mate y termo", points: 5 },
-      { text: "Planificaciones", points: 0 },
-      { text: "Celular con 3% de batería", points: 4 },
+      { text: "Celular con 3 % de batería", points: 4 },
+      { text: "Planificaciones", points: 1 },
       { text: "Marcadores", points: 1 },
-      { text: "Lentes - Parlante - Birome", points: 1 },
-    ],
+      { text: "Lentes - parlante - birome", points: 1 },
+      { text: "Útiles extras para prestarle a los chicos", points: 1 }
+    ]
   },
   {
-    question: "Una frase típica de los docentes",
+    question: "Una frase típica que dice un docente en clase/sala",
     answers: [
-      { text: "Silencio!", points: 6 },
-      { text: "Muy bien, excelente", points: 4 },
-      { text: "¿Quién falta hoy?", points: 4 },
+      { text: "¡Silencio!", points: 7 },
+      { text: "¿Quién falta hoy?", points: 3 },
       { text: "Si siguen hablando, no hay recreo/patio", points: 6 },
-      { text: "Después lo charlamos en el recreo/patio", points: 4 },
-      { text: "Manos arriba para contestar", points: 5 },
-      { text: "A guardar que ya viene, ¿te ayudo con la campera?", points: 1 },
-    ],
+      { text: "¡Después lo charlamos en el recreo/patio!", points: 4 },
+      { text: "Manos arriba para contestar", points: 4 },
+      { text: "Muy bien, excelente", points: 3 },
+      { text: "A guardar que ya viene..... - te ayudo con la campera?", points: 1 }
+    ]
+  },
+  {
+    question: "Un objeto que desaparece misteriosamente en la escuela",
+    answers: [
+      { text: "Lápices / Marcadores", points: 12 },
+      { text: "Control remoto del AA", points: 4 },
+      { text: "Alumnos", points: 4 },
+      { text: "Tijeras", points: 4 },
+      { text: "Pelotas", points: 2 },
+      { text: "Borrador del pizarrón", points: 1 },
+      { text: "Cargador / Notebook", points: 1 },
+      { text: "Sacapuntas", points: 1 },
+      { text: "Cintas adhesivas - tijeras - fruta", points: 1 },
+      { text: "Borradores de pizarra", points: 1 }
+    ]
   },
   {
     question: "Algo que los chicos siempre preguntan",
     answers: [
       { text: "¿Puedo ir al baño?", points: 17 },
-      { text: "¿Cuánto falta para ir a casa?", points: 25 },
-      { text: "¿Ya terminamos?", points: 20 },
-      { text: "¿Cuándo vamos al recreo/patio?", points: 15 },
-      { text: "¿Cuenta para la nota?", points: 10 },
-      { text: "¿Puedo ser el primero?", points: 5 },
-    ],
-  },
-  {
-    question: "Un momento del año escolar que nos agobia",
-    answers: [
-      { text: "Entrega de informes / boletines", points: 30 },
-      { text: "Acto de fin de año", points: 25 },
-      { text: "Reuniones de familias", points: 20 },
-      { text: "Graduación", points: 15 },
-      { text: "Primer día de clases", points: 10 },
-    ],
+      { text: "¿Cuenta para la nota?", points: 4 },
+      { text: "¿Cuánto falta para ir a casa?", points: 3 },
+      { text: "¿Puedo ser el primero?", points: 2 },
+      { text: "¿Cuándo vamos al recreo/patio?", points: 2 },
+      { text: "Corregiste las pruebas?", points: 1 },
+      { text: "¿Me peinas?", points: 1 },
+      { text: "Todas!", points: 1 },
+      { text: "Cuándo desayunamos? - Puedo sacar mis juguetes?-", points: 1 }
+    ]
   },
   {
     question: "Una actividad que te salva el día",
     answers: [
-      { text: "Tener Ed. Física", points: 30 },
-      { text: "Que un colega te cubra la clase", points: 25 },
-      { text: "Que se corte la luz y se suspendan las clases", points: 20 },
-      { text: "Ver una película en clase", points: 15 },
-      { text: "Otros", points: 10 },
-    ],
+      { text: "Tener Ed. Física", points: 15 },
+      { text: "Que se corte la luz y se suspendan las clases", points: 8 },
+      { text: "Otros", points: 4 },
+      { text: "Ver una pelicula en clase", points: 4 },
+      { text: "Que un colega te cubra la clase", points: 4 }
+    ]
   },
   {
     question: "Un material que nunca falta en el jardín",
@@ -78,12 +86,14 @@ const questions = [
   {
     question: "El momento del día que más disfrutan los docentes",
     answers: [
-      { text: "El recreo / patio", points: 30 },
-      { text: "Cuando termina el día y se apaga la luz", points: 25 },
-      { text: "La hora libre", points: 20 },
-      { text: "El saludo cariñoso de los alumnos", points: 15 },
-      { text: "La salida anticipada de Shabat", points: 10 },
-    ],
+      { text: "El saludo cariñoso de los alumnos", points: 10 },
+      { text: "La hora libre", points: 9 },
+      { text: "Cuando termina el día y se apaga la luz", points: 7 },
+      { text: "La salida anticipada de Shabat", points: 5 },
+      { text: "El recreo / patio", points: 1 },
+      { text: "Las primeras dos", points: 1 },
+      { text: "La clase de educación física 😁", points: 1 }
+    ]
   },
 ];
 

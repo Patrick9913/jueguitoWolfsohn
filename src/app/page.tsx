@@ -9,6 +9,17 @@ declare global {
   }
 }
 
+const teamColors: Record<string, string> = {
+  Naranja: "#f97316",
+  Violeta: "#8b5cf6",
+  Celeste: "#0ea5e9",
+  Verde: "#22c55e",
+  Fucsia: "#ec4899",
+  Rojo: "#ef4444"
+};
+
+const teamNames = ["Naranja", "Violeta", "Celeste", "Verde", "Fucsia", "Rojo"];
+
 const questions = [
   {
     question: "Algo que nunca falta en la mochila/cartera de un docente",
@@ -103,11 +114,14 @@ const questions = [
 export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [revealed, setRevealed] = useState(Array(questions[0].answers.length).fill(false));
-  const [teamTurn, setTeamTurn] = useState(1);
-  const [teamScores, setTeamScores] = useState({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 });
+  const [startingTeamIndex, setStartingTeamIndex] = useState(0); // nuevo: quien arranca cada ronda
+  const [teamTurn, setTeamTurn] = useState(teamNames[0]);
+  const [teamScores, setTeamScores] = useState(
+    Object.fromEntries(teamNames.map(name => [name, 0]))
+  );
   const [feedback, setFeedback] = useState<null | "win" | "lose">(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [winner, setWinner] = useState<{team: number, points: number} | null>(null);
+  const [winner, setWinner] = useState<{team: string, points: number} | null>(null);
 
   const audioCtxRef = useRef<AudioContext | null>(null);
   const winAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -156,7 +170,7 @@ export default function Home() {
       loseAudioRef.current = a;
     }
     if (!applauseAudioRef.current) {
-      const a = new Audio("/apla.mp3"); // <-- tu sonido de aplausos
+      const a = new Audio("/apla.mp3");
       a.preload = "auto";
       a.volume = 0.9;
       applauseAudioRef.current = a;
@@ -195,7 +209,10 @@ export default function Home() {
     setTimeout(() => {
       setFeedback(null);
       setIsTransitioning(false);
-      setTeamTurn((prev) => (prev === 6 ? 1 : prev + 1));
+      // pasar turno dentro de la misma ronda
+      const currentIdx = teamNames.indexOf(teamTurn);
+      const nextIdx = (currentIdx + 1) % teamNames.length;
+      setTeamTurn(teamNames[nextIdx]);
     }, 900);
   };
 
@@ -206,7 +223,7 @@ export default function Home() {
     setRevealed(newRevealed);
     setTeamScores(prev => ({
       ...prev,
-      [teamTurn]: prev[teamTurn as keyof typeof prev] + questions[currentIndex].answers[index].points
+      [teamTurn]: prev[teamTurn] + questions[currentIndex].answers[index].points
     }));
     endPlayWith("win");
   };
@@ -217,16 +234,20 @@ export default function Home() {
 
   const nextQuestion = () => {
     if (currentIndex === questions.length - 1) {
-      // ULTIMA PREGUNTA => ANUNCIAR GANADOR
-      const entries = Object.entries(teamScores) as [string, number][];
+      // ANUNCIAR GANADOR
+      const entries = Object.entries(teamScores);
       const [winnerTeam, maxPoints] = entries.reduce((max, curr) => curr[1] > max[1] ? curr : max);
-      setWinner({ team: Number(winnerTeam), points: maxPoints });
+      setWinner({ team: winnerTeam, points: maxPoints });
       playApplause();
       return;
     }
     const nextIndex = currentIndex + 1;
     setCurrentIndex(nextIndex);
     setRevealed(Array(questions[nextIndex].answers.length).fill(false));
+    // 👉 rotamos quién arranca
+    const newStarting = (startingTeamIndex + 1) % teamNames.length;
+    setStartingTeamIndex(newStarting);
+    setTeamTurn(teamNames[newStarting]);
   };
 
   if (winner) {
@@ -264,12 +285,25 @@ export default function Home() {
 
         <div className="mt-8 grid grid-cols-3 gap-6 text-center">
           {Object.entries(teamScores).map(([team, score]) => {
-            const isCurrent = Number(team) === teamTurn;
+            const isCurrent = team === teamTurn;
+            const maxPoints = Math.max(...Object.values(teamScores));
+            const isLeader = score === maxPoints && maxPoints > 0;
             return (
-              <div key={team} className={`rounded-xl p-3 ${isCurrent ? "ring-4 ring-blue-500 bg-white" : ""}`}>
-                <p className={`text-lg font-medium ${isCurrent ? "text-blue-700" : ""}`}>Equipo {team}</p>
+              <div
+                key={team}
+                className={`rounded-xl p-4 text-white shadow-md relative transform transition-transform duration-300 ${
+                  isCurrent ? "scale-115" : "scale-100"
+                }`}
+                style={{ backgroundColor: teamColors[team] }}
+              >
+                {isLeader && (
+                  <span className="absolute -top-3 -right-3 text-2xl">👑</span>
+                )}
+                <p className="text-lg font-medium">Equipo {team}</p>
                 <p className="text-3xl font-bold">{score}</p>
-                {isCurrent && <p className="text-xs uppercase tracking-wide mt-1">En juego</p>}
+                {isCurrent && (
+                  <p className="text-xs uppercase tracking-wide mt-1">En juego</p>
+                )}
               </div>
             );
           })}
